@@ -1,2 +1,4 @@
 .DS_Store
 __pycache__/
+# не публиковать: TAE short form только для локальной проверки скилла
+skills/tae/refs/tae-steps-short-form.pdf

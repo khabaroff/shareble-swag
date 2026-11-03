@@ -12,5 +12,6 @@
 ## Скиллы
 
 - [`skills/hypothesis-map`](skills/hypothesis-map/) — скилл для Claude: Карта гипотез с экспортом в Excalidraw
+- [`skills/tae`](skills/tae/) — скилл для Claude: фасилитация Thinking At the Edge (Gendlin & Hendricks) — от «знаю, но не могу сказать» к своим терминам и теории; методички в `refs/`
 
 Вопросы → [@khabaroff](https://t.me/khabaroff)
