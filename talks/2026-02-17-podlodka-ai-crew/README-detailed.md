@@ -515,7 +515,7 @@ NOW EVALUATE THE FOLLOWING TEXT:
 ```
 1. Открыть n8n
 2. Workflows → Import
-3. Выбрать файл: 002 YouTube Channel Monitor with Telegram Notifications.json
+3. Выбрать файл: 004 YouTube Channel Monitor with Telegram Notifications.json
 4. Click "Import"
 ```
 
@@ -601,7 +601,7 @@ OpenRouter:
 
 #### 3.2. Тест основного workflow (ручной запуск)
 ```
-1. Workflow → открыть "002 YouTube Channel Monitor with Telegram Notifications"
+1. Workflow → открыть "004 YouTube Channel Monitor with Telegram Notifications"
 2. Кликнуть "Test Workflow"
 3. Ждать выполнения (~30-60 сек на видео)
 4. Проверить:
@@ -866,7 +866,7 @@ Adjust score:
 - [Prompt NoCode Short](<Prompt NoCode Short.md>) — краткая версия промпта для автоматизации
 - [Prompt NoCode Long](<Prompt NoCode Long.md>) — расширенная версия с деталями реализации
 - [Презентация](2026-02-17%20Podlodka%20Crew.pdf) — слайды лекции
-- [Workflow JSON](002%20YouTube%20Channel%20Monitor%20with%20Telegram%20Notifications.json) — готовый сценарий для импорта
+- [Workflow JSON](004%20YouTube%20Channel%20Monitor%20with%20Telegram%20Notifications.json) — готовый сценарий для импорта
 
 ---
 
