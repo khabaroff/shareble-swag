@@ -1,0 +1,281 @@
+/* ==========================================================================
+   Khabaroff Design System — Colors & Typography
+   Извлечено из src/styles/global.css сайта khabaroff.com
+   ========================================================================== */
+
+/* ---- Fonts (local WOFF2; copy from /fonts) ------------------------------ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/inter-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/inter-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/lora-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/lora-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/ibm-plex-serif-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/ibm-plex-serif-400i.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Serif';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/ibm-plex-serif-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Serif';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/ibm-plex-serif-700i.woff2') format('woff2');
+}
+
+:root {
+  /* ---- Font families ---------------------------------------------------- */
+  --font-display: 'Lora', Georgia, 'Times New Roman', Times, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-article: 'IBM Plex Serif', Georgia, 'Times New Roman', Times, serif;
+
+  /* ---- Brand / accent colors ------------------------------------------- */
+  --color-primary: #2F4760;       /* slate-blue — links, primary CTA */
+  --color-accent-green: #A6BDA3;  /* sage — soft accent */
+  --color-accent-yellow: #F7D174; /* warm yellow — soft accent */
+
+  /* ---- Neutral palette ------------------------------------------------- */
+  --color-text: #1a1a1a;
+  --color-text-secondary: #666666;
+  --color-text-muted: #6F6F6F;
+  --color-footer-text: #999999;
+  --color-border: #e5e5e5;
+  --color-background: #fafafa;
+  --color-background-alt: #f5f5f5;
+  --color-white: #ffffff;
+  --color-dark: #1a1a1a;
+
+  /* ---- Semantic surfaces / text / borders ------------------------------ */
+  --surface-page: var(--color-white);
+  --surface-page-alt: var(--color-background);
+  --surface-card: var(--color-white);
+  --surface-card-muted: var(--color-background-alt);
+  --surface-chip-hover: rgba(26, 26, 26, 0.06);
+  --surface-note-band: #dae0e6;
+
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-secondary);
+  --text-muted: var(--color-text-muted);
+  --text-link: var(--color-primary);
+  --text-inverse: var(--color-white);
+  --text-footer: var(--color-footer-text);
+
+  --border-subtle: rgba(26, 26, 26, 0.1);
+  --border-strong: rgba(26, 26, 26, 0.35);
+
+  --overlay-soft: rgba(26, 26, 26, 0.06);
+  --overlay-strong: rgba(26, 26, 26, 0.1);
+  --overlay-scrim: rgba(26, 26, 26, 0.6);
+
+  /* ---- Callouts (info/warning/success) --------------------------------- */
+  --color-callout-info-bg: #eff6ff;
+  --color-callout-info-border: #60a5fa;
+  --color-callout-info-text: #1e40af;
+  --color-callout-warning-bg: #fffbeb;
+  --color-callout-warning-border: #fbbf24;
+  --color-callout-warning-text: #92400e;
+  --color-callout-success-bg: #f0fdf4;
+  --color-callout-success-border: #4ade80;
+  --color-callout-success-text: #166534;
+
+  --color-star-empty: #d1d5db;
+  --color-star-filled: #fbbf24;
+  --color-play-button: #ff2d2d;
+  --color-play-button-hover: #d80f0f;
+
+  /* ---- Code blocks ----------------------------------------------------- */
+  --color-code-bg: #f3f4f6;
+  --color-code-block-bg: #111827;
+  --color-code-block-text: #f9fafb;
+
+  /* ---- Type scale (foundation only — do NOT use as font-size in pages) - */
+  --text-s: 14px;
+  --text-m: 18px;
+  --text-l: 24px;
+  --text-lg: 32px;
+  --text-xl: 48px;
+  --text-2xl: 60px;
+
+  /* ---- Type roles (use these in pages) --------------------------------- */
+  --type-ui-meta-size: var(--text-s);
+  --type-ui-compact-size: 16px;
+  --type-ui-size: var(--text-m);
+  --type-reading-size: var(--text-m);
+  --type-reading-lead-size: var(--text-l);
+  --type-display-title-size: var(--heading-2);
+  --type-display-section-size: var(--text-lg);
+  --type-display-compact-size: var(--heading-3);
+
+  --heading-1: var(--text-lg);
+  --heading-2: var(--text-lg);
+  --heading-3: var(--text-l);
+
+  --heading-letter-spacing: -0.01em;
+  --label-letter-spacing: 0.05em;
+  --heading-line-height: 1.1;
+  --body-line-height: 1.6;
+  --reading-line-height: 1.65;
+  --subheading-line-height: 1.2;
+  --title-line-height: 1.35;
+  --deck-line-height: 1.4;
+
+  /* ---- Spacing --------------------------------------------------------- */
+  --space-3xs: 4px;
+  --space-2xs: 12px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+  --space-chip-y: 6px;
+  --space-chip-x: 12px;
+
+  --section-gap-sm: 40px;
+  --section-gap-md: 56px;
+  --section-gap-lg: 80px;
+  --section-gap-xl: 104px;
+
+  /* ---- Shadows & radii ------------------------------------------------- */
+  --shadow-sm: 0 4px 12px rgba(26, 26, 26, 0.08);
+  --shadow-md: 0 12px 32px rgba(26, 26, 26, 0.1);
+  --shadow-lg: 0 24px 60px rgba(26, 26, 26, 0.14);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --opacity-hover: 0.7;
+  --ease-quiet: cubic-bezier(.4, 0, .2, 1);
+  --ease-display: cubic-bezier(.77, 0, .18, 1);
+
+  /* ---- Layout ---------------------------------------------------------- */
+  --max-width: 1120px;
+  --wide-max-width: 1400px;
+  --reading-column: 700px;
+  --reading-measure: var(--reading-column);
+  --reading-measure-narrow: 640px;
+  --editorial-gap: 40px;
+  --content-padding: 16px;
+  --site-header-min-height: 84px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --content-padding: 24px;
+    --heading-1: var(--text-xl);
+    --heading-2: var(--text-2xl);
+    --heading-3: var(--text-lg);
+    --type-ui-size: var(--text-l);
+    --type-reading-size: var(--text-l);
+    --type-display-section-size: var(--text-xl);
+  }
+}
+
+/* ---- Semantic typography roles (use these in markup) ------------------- */
+.type-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--heading-2);
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  color: var(--text-primary);
+}
+.type-h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--type-display-section-size);
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  color: var(--text-primary);
+}
+.type-h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--type-ui-size);
+  line-height: var(--subheading-line-height);
+  color: var(--text-primary);
+}
+.type-section-label {
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  font-size: var(--type-ui-meta-size);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: uppercase;
+}
+.type-body {
+  font-family: var(--font-body);
+  font-size: var(--type-ui-size);
+  line-height: var(--body-line-height);
+  color: var(--text-primary);
+}
+.type-reading {
+  font-family: var(--font-article);
+  font-size: var(--type-reading-size);
+  line-height: var(--reading-line-height);
+  color: var(--text-primary);
+}
+.type-reading-lead {
+  font-family: var(--font-article);
+  font-size: var(--type-reading-lead-size);
+  line-height: var(--deck-line-height);
+  color: var(--text-primary);
+}
+.type-meta {
+  font-family: var(--font-body);
+  font-size: var(--type-ui-meta-size);
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+.type-quote {
+  font-family: var(--font-article);
+  font-style: italic;
+  font-size: var(--type-reading-lead-size);
+  line-height: var(--deck-line-height);
+  color: var(--text-primary);
+}

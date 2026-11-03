@@ -1,0 +1,409 @@
+{
+  "name": "001 YouTube Channel Monitor with Telegram Notifications",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "id": "5b66e6ad-016c-478a-9f2b-57ccc5cacc83",
+      "name": "Every Hour Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "rss_url",
+              "value": "https://www.youtube.com/feeds/videos.xml?channel_id=UCOei1E1Vqq10S913OEqTWGw",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f161ee68-0e79-494c-9d71-9ebdb319df82",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.rss_url }}",
+        "options": {}
+      },
+      "id": "aabc50d7-0756-4d19-a324-b6991cec73ca",
+      "name": "Read YouTube RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        592,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "maxItems": 20
+      },
+      "id": "e0e80f6d-f6e8-4d77-9e1e-83a449839b31",
+      "name": "Take 10 Videos",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        960,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "oohzytBYLRYrzqQh",
+          "mode": "list",
+          "cachedResultName": "videos",
+          "cachedResultUrl": "/projects/Ficpx7YIHjuBLAqy/datatables/oohzytBYLRYrzqQh"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "video_id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "id": "c5435e0d-349b-4ad2-a77f-b69e948b756e",
+      "name": "Check If Video Exists",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "message",
+              "value": "={{ 'Новое видео: ' + $json.title + '\\nСсылка: ' + $json.link }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "515171b8-e32a-4b48-b0fe-99208128702c",
+      "name": "Format Telegram Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1408,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "id": "8618e57c-863d-4c16-969f-d9aa589e96e7",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1632,
+        416
+      ],
+      "webhookId": "ac5bd958-1e01-45e8-bbc7-832e4366a7dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "ckHex4y2gPZpPxQE",
+          "name": "@content_tools_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "video_id",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "sent_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7ad7ffad-1dc3-49fb-9466-a5d12ef16d28",
+      "name": "Prepare Video Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1856,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "oohzytBYLRYrzqQh",
+          "mode": "list",
+          "cachedResultName": "videos",
+          "cachedResultUrl": "/projects/Ficpx7YIHjuBLAqy/datatables/oohzytBYLRYrzqQh"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "video_id": "={{ $('Take 10 Videos').item.json.id }}",
+            "title": "={{ $('Take 10 Videos').item.json.title }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "video_id",
+              "displayName": "video_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sent_at",
+              "displayName": "sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "aaed3f7a-a219-488c-bbda-825b3cf532af",
+      "name": "Store Sent Video",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Создайте Data Table:\nПерейдите на вкладку Data Tables и создайте таблицу с именем youtube_sent_videos с колонками:\n\nvideo_id (text)\ntitle (text)\nsent_at (text)\nПосле создания таблицы, выберите её в узлах \"Check If Video Exists\" и \"Store Sent Video\".\n\nСоздайте Data Table:\nsubscribers",
+        "height": 304,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ba8aa13b-372f-486f-a16c-1c32918f7dab",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "253a8e7c-fdfa-4cc7-89ac-f4fef97d6e0c",
+              "leftValue": "={{ $json.link }}",
+              "rightValue": "shorts",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        784,
+        544
+      ],
+      "id": "c522b805-a39d-43fc-a964-e1d02faec130",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every Hour Check": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Read YouTube RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read YouTube RSS": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Take 10 Videos": {
+      "main": [
+        [
+          {
+            "node": "Check If Video Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Video Exists": {
+      "main": [
+        [
+          {
+            "node": "Format Telegram Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Telegram Message": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to Telegram": {
+      "main": [
+        [
+          {
+            "node": "Prepare Video Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Video Data": {
+      "main": [
+        [
+          {
+            "node": "Store Sent Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Take 10 Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "46542716-c1bc-4f44-9a26-45af6ba5587d",
+  "meta": {
+    "instanceId": "2f5df2520c9742510e250c6d2c04977715d5e19ed0f5bb8b213412340397834f"
+  },
+  "id": "9PbNb1r7sde9ri45WXtgZ",
+  "tags": []
+}

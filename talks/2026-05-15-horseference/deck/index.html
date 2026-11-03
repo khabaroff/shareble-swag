@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>AI-инструменты в работе — Сергей Хабаров · 15 мая 2026</title>
+  <link rel="stylesheet" href="./colors_and_type.css">
+  <style>
+    :root {
+      --slide-pad-x: 96px;
+      --slide-pad-y: 80px;
+    }
+    body { margin: 0; background: #1a1a1a; }
+    deck-stage section {
+      width: 1920px; height: 1080px;
+      position: relative;
+      box-sizing: border-box;
+      padding: 160px var(--slide-pad-x) var(--slide-pad-y);
+      font-family: var(--font-body);
+      color: var(--text-primary);
+      background: var(--surface-page);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-bg-alt   { background: var(--color-background); }
+    .slide-bg-dark  { background: var(--color-dark); color: var(--text-inverse); }
+
+    /* ---- chrome ---- */
+    .slide-mark {
+      position: absolute; top: 56px; left: var(--slide-pad-x);
+      display: flex; align-items: center; gap: 16px;
+      font-size: 18px; color: var(--text-muted);
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .slide-mark img { height: 22px; }
+    .slide-mark .rule { width: 48px; height: 1px; background: currentColor; opacity: 0.35; display: inline-block; }
+    .slide-bg-dark .slide-mark { color: rgba(255,255,255,0.5); }
+
+    .slide-footer {
+      position: absolute;
+      bottom: 56px; left: var(--slide-pad-x); right: var(--slide-pad-x);
+      display: flex; justify-content: space-between;
+      font-size: 18px; color: var(--text-footer);
+    }
+    .slide-bg-dark .slide-footer { color: rgba(255,255,255,0.4); }
+
+    /* ---- section label ---- */
+    .slide-section-label {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 22px; color: var(--text-muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin: 0 0 32px 0;
+    }
+    .slide-section-label .num  { font-family: var(--font-display); font-weight: 700; color: var(--text-primary); }
+    .slide-section-label .rule { width: 64px; height: 1px; background: currentColor; opacity: 0.4; }
+    .slide-bg-dark .slide-section-label .num  { color: #fff; }
+
+    /* ---- type ---- */
+    h1.slide-title-xl { font-family: var(--font-display); font-weight: 400; font-size: 100px; line-height: 1.05; letter-spacing: -0.02em; margin: 0;  }
+    h2.slide-title    { font-family: var(--font-display); font-weight: 400; font-size: 80px;  line-height: 1.1;  letter-spacing: -0.01em; margin: 0 0 48px 0; max-width: 1500px; }
+    h3.slide-eyebrow  { font-family: var(--font-body);    font-weight: 700; font-size: 22px;  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary); margin: 0 0 24px 0; }
+    p.slide-body      { font-family: var(--font-article); font-size: 34px;  line-height: 1.5;  max-width: 1400px; margin: 0; }
+    p.slide-deck      { font-family: var(--font-article); font-size: 44px;  line-height: 1.4;  max-width: 1500px; margin: 0; }
+
+    /* ---- bullets ---- */
+    ul.slide-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 28px; }
+    ul.slide-bullets li { font-family: var(--font-article); font-size: 36px; line-height: 1.4; padding-left: 40px; position: relative; max-width: 1450px; }
+    ul.slide-bullets li::before { content: "—"; position: absolute; left: 0; color: var(--color-primary); }
+    ul.slide-bullets li small   { font-size: 0.72em; color: var(--text-secondary); display: block; margin-top: 6px; font-family: var(--font-body); }
+
+    /* ---- comparison ---- */
+    .slide-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 16px; }
+    .slide-comparison-col { background: var(--surface-page-alt); border: 1px solid var(--color-border); border-radius: 16px; padding: 48px; }
+    .slide-comparison-col h4 { margin: 0 0 20px 0; font-family: var(--font-display); font-size: 30px; font-weight: 700; }
+    .slide-comparison-col p  { font-family: var(--font-article); font-size: 26px; line-height: 1.55; margin: 0; color: var(--text-secondary); }
+
+    /* ---- title slide ---- */
+    .title-stack { margin-top: auto; }
+    .title-meta  { margin-top: 28px; font-size: 22px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+
+    /* ---- end slide ---- */
+    .end-stack   { margin-top: auto; display: flex; flex-direction: column; gap: 32px; }
+    .end-handles { display: flex; gap: 48px; font-size: 28px; color: var(--text-secondary); }
+    .end-handles span { font-family: var(--font-article); }
+
+    /* ---- case label pill ---- */
+    .case-pill {
+      display: inline-block;
+      background: var(--color-primary);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 18px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 8px 24px; border-radius: 999px;
+      margin-bottom: 32px;
+    }
+    .slide-bg-dark .case-pill { background: rgba(255,255,255,0.15); color: #fff; }
+
+    /* ---- demo badge ---- */
+    .demo-badge {
+      position: absolute; top: 56px; right: var(--slide-pad-x);
+      font-size: 18px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--color-primary); border: 2px solid var(--color-primary);
+      padding: 6px 20px; border-radius: 999px;
+    }
+    .slide-bg-dark .demo-badge { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.4); }
+
+    /* ---- link column ---- */
+    .slide-links {
+      display: flex; flex-direction: column; gap: 20px;
+      align-items: flex-start;
+      margin-top: 48px;
+    }
+    .slide-links a {
+      font-family: var(--font-article); font-size: 30px;
+      color: var(--color-primary); text-decoration: none;
+      transition: color 0.2s ease;
+      display: inline-block;
+    }
+    .slide-links a:hover { color: var(--text-muted); }
+    .slide-bg-dark .slide-links a { color: rgba(255,255,255,0.9); }
+    .slide-bg-dark .slide-links a:hover { color: rgba(255,255,255,0.5); }
+
+    /* ---- divider paragraph ---- */
+    p.slide-divider-body {
+      font-family: var(--font-article); font-size: 30px; line-height: 1.55;
+      color: rgba(255,255,255,0.75); margin: 0; max-width: 1300px;
+    }
+
+    /* ---- agenda list ---- */
+    .agenda-list { display: flex; flex-direction: column; gap: 28px; }
+    .agenda-row  { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+    .agenda-row .case-pill { margin: 0; flex-shrink: 0; }
+    .agenda-row .case-pill.is-passive {
+      background: transparent; color: var(--text-muted); border: 1.5px solid var(--color-border);
+    }
+    p.agenda-title { font-family: var(--font-display); font-weight: 700; font-size: 38px; line-height: 1.1; margin: 0 0 10px; }
+    p.agenda-meta  { font-family: var(--font-article); font-size: 26px; color: var(--text-secondary); margin: 0; }
+
+    /* ---- animations ---- */
+    /* Headings (h1, h2) are NEVER hidden — they appear immediately to anchor attention.
+       Everything else fades up after the slide becomes active. */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    deck-stage section .slide-mark,
+    deck-stage section .slide-comparison,
+    deck-stage section ul.slide-bullets > li,
+    deck-stage section p.slide-body,
+    deck-stage section p.slide-deck,
+    deck-stage section p.slide-divider-body,
+    deck-stage section .slide-links,
+    deck-stage section .title-meta,
+    deck-stage section .end-stack,
+    deck-stage section .demo-badge,
+    deck-stage section img,
+    deck-stage section .slide-footer { opacity: 0; }
+
+    deck-stage section[data-deck-active] .slide-mark { animation: fadeUp .4s .05s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] img         { animation: fadeUp .6s .05s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] .demo-badge { animation: fadeUp .4s .10s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] .title-meta { animation: fadeUp .5s .20s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] .slide-comparison { animation: fadeUp .5s .25s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] ul.slide-bullets > li { animation: fadeUp .4s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] ul.slide-bullets > li:nth-child(1) { animation-delay: .20s; }
+    deck-stage section[data-deck-active] ul.slide-bullets > li:nth-child(2) { animation-delay: .28s; }
+    deck-stage section[data-deck-active] ul.slide-bullets > li:nth-child(3) { animation-delay: .36s; }
+    deck-stage section[data-deck-active] ul.slide-bullets > li:nth-child(4) { animation-delay: .44s; }
+    deck-stage section[data-deck-active] ul.slide-bullets > li:nth-child(5) { animation-delay: .52s; }
+    deck-stage section[data-deck-active] ul.slide-bullets > li:nth-child(6) { animation-delay: .60s; }
+    deck-stage section[data-deck-active] p.slide-body,
+    deck-stage section[data-deck-active] p.slide-deck,
+    deck-stage section[data-deck-active] p.slide-divider-body { animation: fadeUp .5s .25s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] .slide-links { animation: fadeUp .5s .35s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+    deck-stage section[data-deck-active] .end-stack    { animation: fadeUp .6s .15s var(--ease-display, cubic-bezier(.77,0,.18,1)) both; }
+    deck-stage section[data-deck-active] .slide-footer { animation: fadeUp .4s .55s var(--ease-quiet, cubic-bezier(.4,0,.2,1)) both; }
+
+    /* ---- print / export-to-PDF: everything visible, no animation ----
+       Browser save-as-PDF не запускает CSS-анимации — без этого блока
+       все элементы с opacity:0 останутся прозрачными. */
+    @media print {
+      deck-stage section,
+      deck-stage section * {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      deck-stage section,
+      deck-stage section * {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+
+</head>
+<body>
+<deck-stage>
+
+
+  <!-- 01 Title -->
+  <section data-screen-label="01 Title">
+    <img src="./assets/khabaroff-poster.jpg" style="position:absolute; right:96px; top:56px; height:50%; width:auto; object-fit:contain; object-position:top;">
+    <div class="slide-mark">
+      <span>Сергей Хабаров · 15 мая 2026</span>
+    </div>
+    <div class="title-stack" style="position:relative; z-index:1;">
+      <h1 class="slide-title-xl">Коньсультанты ИИз ларца,<br/>совет синтетических</h1>
+      <p class="title-meta">Четыре кейса — три живых демо</p> 
+    </div>
+    <div class="slide-footer" style="position:relative; z-index:1;"></div>
+  </section>
+
+  <!-- 02 Agenda -->
+  <section class="slide-bg-alt" data-screen-label="02 Agenda">
+    <h2 class="slide-title">Что смотрим сегодня</h2>
+    <div class="agenda-list">
+
+      <div class="agenda-row">
+        <div>
+          <p class="agenda-title">ThinkFu — библиотека мышления для AI</p>
+          <p class="agenda-meta">200+ приёмов, умный роутер</p>
+        </div>
+        <span class="case-pill">Демо</span>
+      </div>
+
+      <div class="agenda-row">
+        <div>
+          <p class="agenda-title">CBT-терапевт — AI с памятью о клиенте</p>
+          <p class="agenda-meta">Методология в промпте, личный контекст в документах</p>
+        </div>
+        <span class="case-pill">Демо</span>
+      </div>
+
+      <div class="agenda-row">
+        <div>
+          <p class="agenda-title">Панель экспертов — 6 голосов вместо одного</p>
+          <p class="agenda-meta">Каждый с биасом, спорят, приходят к решению</p>
+        </div>
+        <span class="case-pill">Демо</span>
+      </div>
+
+      <div class="agenda-row">
+        <div>
+          <p class="agenda-title">MiroFish — тысячи AI-агентов симулируют общество</p>
+          <p class="agenda-meta">Предсказывают будущее до того, как оно случилось</p>
+        </div>
+        <span class="case-pill is-passive">Картинки</span>
+      </div>
+
+    </div>
+    <div class="slide-footer"><span>02 / 11</span></div>
+  </section>
+
+  <!-- 03 Divider: ThinkFu -->
+  <section class="slide-bg-dark" data-screen-label="03 ThinkFu — divider">
+    <div class="slide-mark"><span>Кейс 1</span><span class="rule"></span><span>ThinkFu</span></div>
+    <div style="margin: auto 0;">
+      <h2 class="slide-title" style="color:#fff; margin-bottom: 36px;">200+ мыслительных ходов<br/>для&nbsp;AI и&nbsp;людей</h2>
+      <p class="slide-divider-body">AI по умолчанию думает линейно — один угол, один ответ. ThinkFu добавляет именованные мыслительные приёмы из TRIZ, Design Thinking, Oblique Strategies. Умный роутер выбирает нужный под тип задачи.</p>
+    </div>
+    <div class="slide-footer"><span>03 / 11</span></div>
+  </section>
+
+  <!-- 04 ThinkFu content -->
+  <section data-screen-label="04 ThinkFu — content">
+    <div class="slide-mark"><span>Кейс 1</span><span class="rule"></span><span>ThinkFu</span></div>
+    <div class="demo-badge">Демо</div>
+
+    <h2 class="slide-title">Метакогниция как сервис</h2>
+    <div class="slide-comparison" style="margin-top: 0;">
+      <div class="slide-comparison-col">
+        <h4>AI без ThinkFu</h4>
+        <p>Мыслит линейно. Один угол зрения. Один ответ. Без структуры — без разнообразия.</p>
+      </div>
+      <div class="slide-comparison-col">
+        <h4>AI с ThinkFu</h4>
+        <p>200+ именованных приёмов: TRIZ, Design Thinking, Oblique Strategies. Роутер выбирает нужный под задачу.</p>
+      </div>
+    </div>
+    <div class="slide-links">
+      <a target="_blank" rel="noopener noreferrer" href="https://thinkfu.org/">→ thinkfu.org</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/move38studios/thinkfu">→ github.com/move38studios/thinkfu</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://api.thinkfu.org/random">→ api.thinkfu.org/random</a>
+    </div>
+    <div class="slide-footer"><span>04 / 11</span></div>
+  </section>
+
+  <!-- 05 Divider: CBT -->
+  <section class="slide-bg-dark" data-screen-label="05 CBT — divider">
+    <div class="slide-mark"><span>Кейс 2</span><span class="rule"></span><span>CBT-терапевт</span></div>
+    <div style="margin: auto 0;">
+      <h2 class="slide-title" style="color:#fff; margin-bottom: 36px;">CBT-методология +<br>профиль клиента</h2>
+      <p class="slide-divider-body">Промпт содержит полный терапевтический протокол — CBT, схема-терапия, mindfulness — одинаковый для всех. Личный контекст клиента: паттерны, триггеры, субличности — загружается из отдельных документов и подставляется в каждую сессию.</p>
+    </div>
+    <div class="slide-footer"><span>05 / 11</span></div>
+  </section>
+
+  <!-- 06 CBT content -->
+  <section data-screen-label="06 CBT — content">
+    <div class="slide-mark"><span>Кейс 2</span><span class="rule"></span><span>CBT-терапевт</span></div>
+    <div class="demo-badge">Демо</div>
+    
+    <h2 class="slide-title">Методология + профиль клиента</h2>
+    <div class="slide-comparison" style="margin-top: 0;">
+      <div class="slide-comparison-col">
+        <h4>Методология — в промпте</h4>
+        <p>CBT, схема-терапия, mindfulness, trauma-informed care. Одна для всех. Не меняется.</p>
+      </div>
+      <div class="slide-comparison-col">
+        <h4>Клиент — в документах</h4>
+        <p>Паттерны, триггеры, субличности, практики. Подставляются как контекст. Каждый раз его данные.</p>
+      </div>
+    </div>
+    <p class="slide-body" style="margin-top: 40px; color: var(--text-secondary);">Терапевтический протокол не меняется от клиента к клиенту — он живёт в промпте и работает одинаково для всех. А вот личная история — паттерны, триггеры, договорённости с прошлых сессий — подгружается из отдельных документов, поэтому встреча с AI начинается не со знакомства, а с продолжения разговора.</p>
+    <div class="slide-footer"><span>06 / 11</span></div>
+  </section>
+
+  <!-- 07 Divider: Expert Panel -->
+  <section class="slide-bg-dark" data-screen-label="07 Expert Panel — divider">
+    <div class="slide-mark"><span>Кейс 3</span><span class="rule"></span><span>Панель экспертов</span></div>
+    <div style="margin: auto 0;">
+      <h2 class="slide-title" style="color:#fff; margin-bottom: 36px;">Шесть ролей —<br>один ответ</h2>
+      <p class="slide-divider-body">Один AI-ассистент — один угол зрения. Панель — это шесть ролей с разными биасами: финансист, стратег, продюсер, бренд, терапевт, адвокат дьявола. Спорят между собой, вытаскивают слепые зоны, сводят к решению.</p>
+    </div>
+    <div class="slide-footer"><span>07 / 11</span></div>
+  </section>
+
+  <!-- 08 Expert Panel content -->
+  <section data-screen-label="08 Expert Panel — content">
+    <div class="slide-mark"><span>Кейс 3</span><span class="rule"></span><span>Панель экспертов</span></div>
+    <div class="demo-badge">Демо</div>
+    
+    <h2 class="slide-title">Каждый видит иначе</h2>
+    <ul class="slide-bullets">
+      <li>💰 CFO — считает деньги и ROI на час</li>
+      <li>📈 Стратег — горизонт 2 года, актив vs линейный доход</li>
+      <li>📋 Продюсер — откуда часы? что режем?</li>
+      <li>🎯 Бренд — это строит имя или нет?</li>
+      <li>🧠 Терапевт — питает или истощает?</li>
+      <li>😈 Адвокат дьявола — из силы или из страха?</li>
+    </ul>
+    <div class="slide-links" style="margin-top: 32px;">
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/karpathy/llm-council">→ Карпаты, LLM Council</a>
+    </div>
+    <div class="slide-footer"><span>08 / 11</span></div>
+  </section>
+
+  <!-- 09 Divider: MiroFish -->
+  <section class="slide-bg-dark" data-screen-label="09 MiroFish — divider">
+    <div class="slide-mark"><span>Кейс 4</span><span class="rule"></span><span>MiroFish</span></div>
+    <div style="margin: auto 0;">
+      <h2 class="slide-title" style="color:#fff; margin-bottom: 36px;">MiroFish — тысячи агентов,<br>одно предсказание</h2>
+      <p class="slide-divider-body">Симуляция общества из тысяч AI-агентов: у каждого личность, память, связи. Берут «семена» из реального мира — новости, законы, сигналы — и проигрывают будущее ещё до того, как оно случилось.</p>
+    </div>
+    <div class="slide-footer"><span>09 / 11</span></div>
+  </section>
+
+  <!-- 10 MiroFish content -->
+  <section class="slide-bg-alt" data-screen-label="10 MiroFish — content">
+    <div class="slide-mark"><span>Кейс 4</span><span class="rule"></span><span>MiroFish</span></div>
+
+    <h2 class="slide-title">Цифровой двойник реальности</h2>
+    <ul class="slide-bullets">
+      <li>Берёт «семена» из реального мира — новости, черновики законов, финансовые сигналы</li>
+      <li>Строит параллельный мир: тысячи агентов с личностями и памятью</li>
+      <li>Смотрит, что произойдёт — до того как решение принято</li>
+    </ul>
+    <div class="slide-links">
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/666ghj/MiroFish">→ MiroFish</a>
+    </div>
+    <div class="slide-footer"><span>10 / 10</span></div>
+  </section>
+
+  <!-- 11 End -->
+  <section data-screen-label="11 End">
+    <img src="./assets/khabaroff-poster.jpg" style="position:absolute; right:96px; top:56px; height:50%; width:auto; object-fit:contain; object-position:top;">
+    <div class="title-stack" style="position:relative; z-index:1;">
+      <img src="./assets/qr-telegram.png" style="width:320px; height:320px; object-fit:contain; margin-bottom:32px; display:block;">
+      <h1 class="slide-title-xl">Спасибо</h1>
+      <p class="title-meta" style="margin-top:32px; font-family:var(--font-display); font-size:40px; letter-spacing:-0.01em; text-transform:none; color:var(--text-secondary);">Сергей Хабаров</p>
+      <p class="title-meta" style="margin-top:8px;">стартапер · консультант · методолог · обучатор в области AI</p>
+      <div class="slide-links">
+        <a target="_blank" rel="noopener noreferrer" href="https://t.me/khabaroff">→ @khabaroff</a>
+        <a target="_blank" rel="noopener noreferrer" href="https://t.me/alliknowisthatidontknownothing">→ телеграм-канал</a>
+        <a target="_blank" rel="noopener noreferrer" href="https://khabaroff.com/">→ khabaroff.com</a>
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/khabaroff/shareble-swag/tree/main/talks/2026-05-15-horseference">→ Все промпты и материалы</a>
+      </div>
+    </div>
+    <div class="slide-footer" style="position:relative; z-index:1;"></div>
+  </section>
+
+</deck-stage>
+<script src="./deck-stage.js"></script>
+<script>
+(function() {
+  var stage = document.querySelector('deck-stage');
+  var startX, startY;
+  stage.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      stage._advance(dx < 0 ? 1 : -1, 'swipe');
+    }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
