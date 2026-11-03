@@ -11,6 +11,6 @@
 
 ## Скиллы
 
-- [`skills/hypothesis-map-main.zip`](skills/hypothesis-map-main.zip) — скилл для Claude: Карта гипотез с экспортом в Excalidraw
+- [`skills/hypothesis-map`](skills/hypothesis-map/) — скилл для Claude: Карта гипотез с экспортом в Excalidraw
 
 Вопросы → [@khabaroff](https://t.me/khabaroff)
